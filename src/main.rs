@@ -48,8 +48,16 @@ fn main() {
             Some(&"echo") => {
                 println!("{}", args[1..].join(" "));
             }
-            Some(_cmd) => {
-                println!("{}: command not found", input.trim())
+            Some(cmd) => {
+                if let Some(path) = find_in_path(cmd) {
+                    if args.len() == 1 {
+                        std::process::Command::new(&path);
+                    } else {
+                        std::process::Command::new(&path).args(&args[1..]);
+                    }
+                } else {
+                    println!("{}: command not found", input.trim())
+                }
             }
             None => continue,
         }
