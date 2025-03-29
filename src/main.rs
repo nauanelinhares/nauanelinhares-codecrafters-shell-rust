@@ -11,6 +11,14 @@ fn main() {
         let mut input: String = String::new();
         stdin.read_line(&mut input).unwrap();
 
+        if input.trim() == "exit 0" {
+            return;
+        }
+
+        if input.trim() == "exit 1" {
+            return;
+        }
+
         println!("{}: command not found", input.trim())
     }
 }
