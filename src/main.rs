@@ -52,7 +52,7 @@ fn main() {
                 if let Some(path) = find_in_path(cmd) {
                     let mut executable = std::process::Command::new(&path);
                     if args.len() > 1 {
-                        let _ = executable.args(&args[1..]).spawn();
+                        let _ = executable.args(&args).spawn();
                     } else {
                         let _ = executable.spawn();
                     }
