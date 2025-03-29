@@ -29,6 +29,8 @@ fn main() {
     let stdin = io::stdin();
     // Wait for user input
     loop {
+        print!("$ ");
+        io::stdout().flush().unwrap();
         let mut input: String = String::new();
         stdin.read_line(&mut input).unwrap();
 
@@ -67,7 +69,5 @@ fn main() {
             }
             None => continue,
         }
-        print!("$ ");
-        io::stdout().flush().unwrap();
     }
 }
