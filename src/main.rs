@@ -1,7 +1,7 @@
 #[allow(unused_imports)]
 use std::io::{self, Write};
 
-static COMMANDS: &[&str] = &["echo", "exit"];
+static COMMANDS: &[&str] = &["echo", "exit", "type"];
 
 fn get_type(command: &str) {
     if COMMANDS.contains(&command) {
