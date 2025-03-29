@@ -24,6 +24,22 @@ fn get_type(command: &str) {
     }
 }
 
+fn execute_file(cmd: &str, args: Vec<&str>) {
+    let mut executable = std::process::Command::new(&cmd);
+    if args.len() > 1 {
+        let output = executable
+            .args(&args[1..])
+            .output()
+            .expect("Failed to execute command");
+        io::stdout().write_all(&output.stdout).unwrap();
+        io::stderr().write_all(&output.stderr).unwrap();
+    } else {
+        let output = executable.output().expect("Failed to execute command");
+        io::stdout().write_all(&output.stdout).unwrap();
+        io::stderr().write_all(&output.stderr).unwrap();
+    }
+}
+
 fn main() {
     // Uncomment this block to pass the first stage
     let stdin = io::stdin();
@@ -50,19 +66,7 @@ fn main() {
             }
             Some(cmd) => {
                 if let Some(_path) = find_in_path(cmd) {
-                    let mut executable = std::process::Command::new(&cmd);
-                    if args.len() > 1 {
-                        let output = executable
-                            .args(&args[1..])
-                            .output()
-                            .expect("Failed to execute command");
-                        io::stdout().write_all(&output.stdout).unwrap();
-                        io::stderr().write_all(&output.stderr).unwrap();
-                    } else {
-                        let output = executable.output().expect("Failed to execute command");
-                        io::stdout().write_all(&output.stdout).unwrap();
-                        io::stderr().write_all(&output.stderr).unwrap();
-                    }
+                    execute_file(cmd, args);
                 } else {
                     println!("{}: command not found", input.trim())
                 }
