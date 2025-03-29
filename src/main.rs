@@ -7,7 +7,7 @@ fn get_type(command: &str) {
     if COMMANDS.contains(&command) {
         println!("{} is a shell builtin", command);
     } else {
-        println!("{}: command not found", command);
+        println!("{}: not found", command);
     }
 }
 
