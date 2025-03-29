@@ -54,6 +54,7 @@ fn main() {
                     if args.len() > 1 {
                         let _ = executable.args(&args[1..]).spawn();
                     } else {
+                        let _ = executable.spawn();
                     }
                 } else {
                     println!("{}: command not found", input.trim())
