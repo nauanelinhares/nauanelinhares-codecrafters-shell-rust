@@ -11,14 +11,17 @@ fn main() {
         let mut input: String = String::new();
         stdin.read_line(&mut input).unwrap();
 
-        if input.trim() == "exit 0" {
-            return;
-        }
+        let args: Vec<&str> = input.trim().split_whitespace().collect();
 
-        if input.trim() == "exit 1" {
-            return;
+        if args[0] == "exit" {
+            if args.len() == 1 {
+            } else if args[1] == "0" {
+                return;
+            }
+        } else if args[0] == "echo" {
+            println!("{}", args[1..].join(" "));
+        } else {
+            println!("{}: command not found", input.trim())
         }
-
-        println!("{}: command not found", input.trim())
     }
 }
