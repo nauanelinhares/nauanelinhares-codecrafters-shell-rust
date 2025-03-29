@@ -29,8 +29,6 @@ fn main() {
     let stdin = io::stdin();
     // Wait for user input
     loop {
-        print!("$ ");
-        io::stdout().flush().unwrap();
         let mut input: String = String::new();
         stdin.read_line(&mut input).unwrap();
 
@@ -52,9 +50,16 @@ fn main() {
                 if let Some(path) = find_in_path(cmd) {
                     let mut executable = std::process::Command::new(&path);
                     if args.len() > 1 {
-                        let _ = executable.args(&args).spawn();
+                        let output = executable
+                            .args(&args[1..])
+                            .output()
+                            .expect("Failed to execute command");
+                        io::stdout().write_all(&output.stdout).unwrap();
+                        io::stderr().write_all(&output.stderr).unwrap();
                     } else {
-                        let _ = executable.spawn();
+                        let output = executable.output().expect("Failed to execute command");
+                        io::stdout().write_all(&output.stdout).unwrap();
+                        io::stderr().write_all(&output.stderr).unwrap();
                     }
                 } else {
                     println!("{}: command not found", input.trim())
@@ -62,5 +67,7 @@ fn main() {
             }
             None => continue,
         }
+        print!("$ ");
+        io::stdout().flush().unwrap();
     }
 }
