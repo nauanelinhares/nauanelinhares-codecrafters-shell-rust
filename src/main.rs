@@ -1,11 +1,24 @@
+use std::env;
 #[allow(unused_imports)]
 use std::io::{self, Write};
+use std::path::Path;
 
-static COMMANDS: &[&str] = &["echo", "exit", "type"];
+static BUILT_IN_COMMANDS: &[&str] = &["echo", "exit", "type"];
+
+fn find_in_path(command: &str) -> Option<String> {
+    env::var("PATH").ok().and_then(|path_var| {
+        path_var.split(':').find_map(|dir| {
+            let full_path = format!("{}/{}", dir, command);
+            Path::new(&full_path).exists().then_some(full_path)
+        })
+    })
+}
 
 fn get_type(command: &str) {
-    if COMMANDS.contains(&command) {
+    if BUILT_IN_COMMANDS.contains(&command) {
         println!("{} is a shell builtin", command);
+    } else if let Some(path) = find_in_path(command) {
+        println!("{} is {}", command, path)
     } else {
         println!("{}: not found", command);
     }
