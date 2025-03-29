@@ -49,12 +49,19 @@ fn main() {
                 println!("{}", args[1..].join(" "));
             }
             Some(cmd) => {
-                if let Some(path) = find_in_path(cmd) {
-                    let mut executable = std::process::Command::new(&path);
+                if let Some(_path) = find_in_path(cmd) {
+                    let mut executable = std::process::Command::new(&cmd);
                     if args.len() > 1 {
-                        let _ = executable.args(&args[1..]).spawn();
+                        let output = executable
+                            .args(&args[1..])
+                            .output()
+                            .expect("Failed to execute command");
+                        io::stdout().write_all(&output.stdout).unwrap();
+                        io::stderr().write_all(&output.stderr).unwrap();
                     } else {
-                        let _ = executable.spawn();
+                        let output = executable.output().expect("Failed to execute command");
+                        io::stdout().write_all(&output.stdout).unwrap();
+                        io::stderr().write_all(&output.stderr).unwrap();
                     }
                 } else {
                     println!("{}: command not found", input.trim())
