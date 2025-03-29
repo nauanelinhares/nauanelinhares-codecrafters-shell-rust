@@ -50,10 +50,10 @@ fn main() {
             }
             Some(cmd) => {
                 if let Some(path) = find_in_path(cmd) {
-                    if args.len() == 1 {
-                        std::process::Command::new(&path);
+                    let mut executable = std::process::Command::new(&path);
+                    if args.len() > 1 {
+                        let _ = executable.args(&args[1..]).spawn();
                     } else {
-                        std::process::Command::new(&path).args(&args[1..]);
                     }
                 } else {
                     println!("{}: command not found", input.trim())
