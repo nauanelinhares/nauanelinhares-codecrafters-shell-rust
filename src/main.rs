@@ -1,6 +1,6 @@
 mod built_in_commands;
 
-use built_in_commands::{echo_command, exit_command, pwd_command};
+use built_in_commands::{cd_command, echo_command, exit_command, pwd_command};
 
 #[allow(unused_imports)]
 use std::env;
@@ -70,6 +70,9 @@ fn main() {
             }
             Some(&"pwd") => {
                 pwd_command();
+            }
+            Some(&"cd") => {
+                cd_command(args[1]);
             }
             Some(cmd) => {
                 if let Some(_path) = find_in_path(cmd) {
