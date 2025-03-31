@@ -1,5 +1,9 @@
-use std::env;
+mod built_in_commands;
+
+use built_in_commands::{echo_command, exit_command, pwd_command};
+
 #[allow(unused_imports)]
+use std::env;
 use std::io::{self, Write};
 use std::path::Path;
 
@@ -57,16 +61,15 @@ fn main() {
                 get_type(args[1]);
             }
             Some(&"exit") => {
-                if args.len() == 1 || args[1] == "0" {
+                if exit_command(args) {
                     return;
-                }
+                };
             }
             Some(&"echo") => {
-                println!("{}", args[1..].join(" "));
+                echo_command(args);
             }
             Some(&"pwd") => {
-                let current_dir = env::current_dir().unwrap();
-                println!("{}", current_dir.display());
+                pwd_command();
             }
             Some(cmd) => {
                 if let Some(_path) = find_in_path(cmd) {
