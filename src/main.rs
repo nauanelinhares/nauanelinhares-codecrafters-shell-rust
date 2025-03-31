@@ -3,7 +3,7 @@ use std::env;
 use std::io::{self, Write};
 use std::path::Path;
 
-static BUILT_IN_COMMANDS: &[&str] = &["echo", "exit", "type"];
+static BUILT_IN_COMMANDS: &[&str] = &["echo", "exit", "type", "pwd"];
 
 fn find_in_path(command: &str) -> Option<String> {
     env::var("PATH").ok().and_then(|path_var| {
@@ -63,6 +63,10 @@ fn main() {
             }
             Some(&"echo") => {
                 println!("{}", args[1..].join(" "));
+            }
+            Some(&"pwd") => {
+                let current_dir = env::current_dir().unwrap();
+                println!("{}", current_dir.display());
             }
             Some(cmd) => {
                 if let Some(_path) = find_in_path(cmd) {
